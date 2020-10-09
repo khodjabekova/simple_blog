@@ -1,0 +1,19 @@
+{% extends "blog/base_blog.html" %}
+
+{% block post_content %}
+  <div class="col-md-auto">
+    <h1>Are you sure you want to delete this post?</h1>
+  </div>
+
+  <span></span>
+
+  <div class="col-md-auto">
+      {% include "blog/_post.html" with post=object hide_delete=True %}
+  </div>
+
+  <form method="POST">
+    {% csrf_token %}
+    <input class="btn btn-danger" type="submit" value="Confirm Delete">
+    <a class="btn btn-simple btn-default" href="{% url 'blog:detail' pk=object.pk %}">Cancel</a>
+  </form>
+{% endblock %}
