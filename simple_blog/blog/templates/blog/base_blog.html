@@ -1,7 +1,24 @@
 {% extends "base.html" %}
+{% block content %}
 
-  {% block content %}
+<nav class="navbar" role="navigation" id="navbar" aria-orientation="vertical">
+  <div class="container">
+      <div class="nav navbar-nav navbar-right nav-pills">
+        <a class="nav-link" href="{% url 'blog:all'%}">All</a>
+        <a class="nav-link" href="{% url 'blog:user_post_list' username=user.username %}">Published</a>
+        <a class="nav-link" href="{% url 'blog:post_draft_list' username=user.username %}">Drafts</a>
+      </div>
+  </div>
+</nav>
 
+{% if messages %}
+  <ul class="messages">
+      {% for message in messages %}
+      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+      {% endfor %}
+  </ul>
+{% endif %}
 
-  {% block post_content %}{% endblock %}
-  {% endblock %}
+{% block post_content %}{% endblock %}
+
+{% endblock %}

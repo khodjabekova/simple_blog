@@ -18,15 +18,19 @@ class Post(models.Model):
     updated_date = models.DateTimeField(auto_now=True)
     text_html = models.TextField(editable=False)
 
+    class Meta:
+        ordering = ['-created_date']
+        unique_together = ['author', 'text']
+
+    def __str__(self):
+        return self.title
+
     def publish(self):
         self.published_date = timezone.now()
         self.save()
 
     def approved_comments(self):
         return self.comments.filter(approved_comment=True)
-
-    def __str__(self):
-        return self.title
 
     def save(self, *args, **kwargs):
         self.text_html = misaka.html(self.text)
@@ -35,9 +39,6 @@ class Post(models.Model):
     def get_absolute_url(self):
         return reverse('blog:detail', kwargs= {'pk': self.pk})
 
-    class Meta:
-        ordering = ['-created_date']
-        unique_together = ['author', 'text']
 
 class Comment(models.Model):
     post = models.ForeignKey('blog.Post', related_name='comments', on_delete=models.CASCADE)
@@ -46,12 +47,12 @@ class Comment(models.Model):
     created_date = models.DateTimeField(auto_now=True)
     approved_comment = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.text
+        
     def approve(self):
         self.approved_comment = True
         self.save()
 
     def get_absolute_url(self):
         return reverse('blog:post_list')
-
-    def __str__(self):
-        return self.text

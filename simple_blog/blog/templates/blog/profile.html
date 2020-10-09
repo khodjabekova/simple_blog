@@ -1,19 +1,7 @@
 {% extends "blog/base_blog.html" %}
-
-
-
-
 {% block post_content %}
 
-  <nav class="navbar" role="navigation" id="navbar aria-orientation="vertical"">
-    <div class="container">
-        <div class="nav navbar-nav navbar-right nav-pills">
-          <a class="nav-link" href="{% url 'blog:all'%}">All</a>
-          <a class="nav-link" href="{% url 'blog:user_post_list' username=user.username %}">Published</a>
-          <a class="nav-link" href="{% url 'blog:post_draft_list' username=user.username %}">Drafts</a>
-        </div>
-    </div>
-  </nav>
+
 
 
 {% endblock %}
