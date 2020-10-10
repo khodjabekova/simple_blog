@@ -1,12 +1,12 @@
 {% extends "blog/base_blog.html" %}
 
 {% block post_content %}
-  <h1>Create a new post</h1>
-  <form id='blogForm' action="{% url 'blog:create'%}" method="post">
-    {% csrf_token %}
-    {{form.as_p}}
-    <input type="submit" class="btn btn-primary" value="Save">
-  </form>
+<h2>Create a new post</h2>
+<form id='blogForm' action="{% url 'blog:create'%}" method="post">
+  {% csrf_token %}
+  {{form.as_p}}
+  <input type="submit" class="btn btn-primary" value="Save">
+</form>
 
-  <script>var editor = new MediumEditor('.editable');</script>
+<script>var editor = new MediumEditor('.editable');</script>
 {% endblock %}

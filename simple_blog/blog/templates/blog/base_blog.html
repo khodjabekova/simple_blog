@@ -1,24 +1,67 @@
 {% extends "base.html" %}
 {% block content %}
 
-<nav class="navbar" role="navigation" id="navbar" aria-orientation="vertical">
-  <div class="container">
-      <div class="nav navbar-nav navbar-right nav-pills">
-        <a class="nav-link" href="{% url 'blog:all'%}">All</a>
-        <a class="nav-link" href="{% url 'blog:user_post_list' username=user.username %}">Published</a>
-        <a class="nav-link" href="{% url 'blog:post_draft_list' username=user.username %}">Drafts</a>
-      </div>
-  </div>
-</nav>
-
 {% if messages %}
-  <ul class="messages">
-      {% for message in messages %}
-      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-      {% endfor %}
-  </ul>
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
 {% endif %}
+<!--<div class="container">-->
+<!--    <nav class="navbar" role="navigation" id="navbar" aria-orientation="vertical">-->
+<!--        <div class="row justify-content-start">-->
+<!--            <div class="col-2">-->
+<!--                <div class="nav navbar-nav navbar-right nav-pills d-flex align-items-start">-->
+<!--                    <a class="nav-link" href="{% url 'blog:all'%}">All</a>-->
+<!--                    <a class="nav-link" href="{% url 'blog:user_post_list' username=user.username %}">Published</a>-->
+<!--                    <a class="nav-link" href="{% url 'blog:post_draft_list' username=user.username %}">Drafts</a>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </nav>-->
+<!--    <div class="col-10 main">-->
 
-{% block post_content %}{% endblock %}
+<!--    </div>-->
+<!--</div>-->
 
+
+<!--<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">-->
+<!--    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">-->
+
+<!--    </div>-->
+<!--</main>-->
+<div class="container">
+    <div class="row">
+        <nav class="col-md-2 d-none d-md-block sidebar">
+            <div class="sidebar-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'blog:user_post_list' username=user.username %}">
+                            <span data-feather="home"></span>
+                            All <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'blog:post_published_list' username=user.username %}">
+                            <span data-feather="home"></span>
+                            Published <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'blog:post_draft_list' username=user.username %}">
+                            <span data-feather="home"></span>
+                            Drafts <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        {% block post_content %}{% endblock %}
+    </div>
+</div>
 {% endblock %}
+
+
+

@@ -17,7 +17,6 @@ User = get_user_model()
 
 class AboutView(TemplateView):
     template_name = 'blog/about.html'
-    #template_name = 'blog/about.html'
 
 
 class ProfileView(TemplateView):
@@ -27,7 +26,7 @@ class ProfileView(TemplateView):
 class PostList(SelectRelatedMixin, ListView):
     model = Post
     select_related = ('author',)
-
+    
     def get_queryset(self):
         return Post.objects.filter(published_date__isnull=False).order_by('created_date')
 
@@ -36,10 +35,12 @@ class UserPostList(SelectRelatedMixin, ListView):
     model = Post
     select_related = ('author',)
     template_name = 'blog/user_post_list.html'
-
+    
     def get_queryset(self):
         try:
-            self.author = User.objects.prefetch_related('posts').get(username__iexact=self.kwargs.get('username'))
+            self.author = User.objects \
+                .prefetch_related('posts') \
+                .get(username__iexact=self.kwargs.get('username'))
         except User.DoesNotExist:
             raise Http404
         else:
@@ -50,14 +51,18 @@ class PublishedPostList(SelectRelatedMixin, ListView):
     model = Post
     select_related = ('author',)
     template_name = 'blog/user_post_list.html'
-
+    
     def get_queryset(self):
         try:
-            self.author = User.objects.prefetch_related('posts').get(username__iexact=self.kwargs.get('username'))
+            self.author = User.objects \
+                .prefetch_related('posts') \
+                .get(username__iexact=self.kwargs.get('username'))
         except User.DoesNotExist:
             raise Http404
         else:
-            return self.request.user.posts.filter(published_date__isnull=False).order_by('published_date')
+            return self.request.user.posts \
+                .filter(published_date__isnull=False) \
+                .order_by('published_date')
 
 
 class PostDraftList(LoginRequiredMixin, SelectRelatedMixin, ListView):
@@ -65,14 +70,18 @@ class PostDraftList(LoginRequiredMixin, SelectRelatedMixin, ListView):
     template_name = 'blog/post_draft_list.html'
     model = Post
     select_related = ('author',)
-
+    
     def get_queryset(self):
         try:
-            self.author = User.objects.prefetch_related('posts').get(username__iexact=self.kwargs.get('username'))
+            self.author = User.objects \
+                .prefetch_related('posts') \
+                .get(username__iexact=self.kwargs.get('username'))
         except User.DoesNotExist:
             raise Http404
         else:
-            return self.request.user.posts.filter(published_date__isnull=True).order_by('created_date')
+            return self.request.user.posts \
+                .filter(published_date=None) \
+                .order_by('created_date')
 
 
 class PostDetail(DetailView):
@@ -84,7 +93,7 @@ class CreatePost(LoginRequiredMixin, SelectRelatedMixin, CreateView):
     redirect_field_name = 'blog/post_detail.html'
     form_class = PostForm
     model = Post
-
+    
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.author = self.request.user
@@ -92,7 +101,7 @@ class CreatePost(LoginRequiredMixin, SelectRelatedMixin, CreateView):
         return super().form_valid(form)
 
 
-class PostUpdate(LoginRequiredMixin,SelectRelatedMixin, UpdateView):
+class PostUpdate(LoginRequiredMixin, SelectRelatedMixin, UpdateView):
     model = Post
     select_related = ('author',)
     fields = ['title', 'text']
@@ -104,11 +113,11 @@ class PostDelete(LoginRequiredMixin, SelectRelatedMixin, DeleteView):
     select_related = ('author',)
     success_url = reverse_lazy('blog:all')
     template_name = 'blog/post_confirm_delete.html'
-
+    
     def get_queryset(self):
         queryset = super().get_queryset()
-        return queryset.filter(author_id = self.request.user.id)
-
+        return queryset.filter(author_id=self.request.user.id)
+    
     def delete(self, *args, **kwargs):
         messages.success(self.request, 'Post Deleted')
         return super().delete(*args, **kwargs)
@@ -130,8 +139,8 @@ def add_comment_to_post(request, pk):
             comment.save()
             return redirect('detail', pk=post.pk)
     else:
-        form = CommentForm #todo: initialize it!
-    return render(request, 'blog/comment_form.html', {'form':form})
+        form = CommentForm  # todo: initialize it!
+    return render(request, 'blog/comment_form.html', {'form': form})
 
 
 @login_required
