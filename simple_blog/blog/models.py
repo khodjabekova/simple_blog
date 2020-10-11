@@ -1,10 +1,6 @@
 from django.db import models
-from django.urls import reverse
-from django.conf import settings
 from django.utils import timezone
 from django.urls import reverse
-from django.contrib.auth.decorators import login_required
-import misaka
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -16,11 +12,9 @@ class Post(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     published_date = models.DateTimeField(blank=True, null=True)
     updated_date = models.DateTimeField(auto_now=True)
-    text_html = models.TextField(editable=False)
 
     class Meta:
         ordering = ['-created_date']
-        unique_together = ['author', 'text']
 
     def __str__(self):
         return self.title
@@ -33,7 +27,6 @@ class Post(models.Model):
         return self.comments.filter(approved_comment=True)
 
     def save(self, *args, **kwargs):
-        self.text_html = misaka.html(self.text)
         super().save(*args,**kwargs)
 
     def get_absolute_url(self):

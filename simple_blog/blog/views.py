@@ -17,7 +17,6 @@ User = get_user_model()
 
 class AboutView(TemplateView):
     template_name = 'blog/about.html'
-    #template_name = 'blog/about.html'
 
 
 class ProfileView(TemplateView):
@@ -81,7 +80,7 @@ class PostDetail(DetailView):
 
 class CreatePost(LoginRequiredMixin, SelectRelatedMixin, CreateView):
     select_related = ('author',)
-    redirect_field_name = 'blog/post_detail.html'
+    redirect_field_name = 'blog/post/post_detail.html'
     form_class = PostForm
     model = Post
 
@@ -153,4 +152,4 @@ def comment_remove(request, pk):
 def post_publish(request, pk):
     post = get_object_or_404(Post, pk=pk)
     post.publish()
-    return redirect('detail', pk=pk)
+    return redirect('blog:detail', pk=pk)
