@@ -49,9 +49,4 @@ body {
   right: 0px;
 }
 
-#block1, #block2
-{
-    display: inline-block;
-    vertical-align:top;
-}
 

@@ -61,7 +61,7 @@ class PublishedPostList(SelectRelatedMixin, ListView):
 
 class PostDraftList(LoginRequiredMixin, SelectRelatedMixin, ListView):
     redirect_field_name = 'blog/post_list.html'
-    template_name = 'blog/post_draft_list.html'
+    template_name = 'blog/user_post_list.html'
     model = Post
     select_related = ('author',)
 
