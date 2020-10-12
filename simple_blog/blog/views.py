@@ -37,7 +37,7 @@ class UserPostList(SelectRelatedMixin, ListView):
     template_name = 'blog/user_post_list.html'
 
     def get_queryset(self):
-        try:
+        try: #check user does exist
             self.author = User.objects.prefetch_related('posts').get(username__iexact=self.kwargs.get('username'))
         except User.DoesNotExist:
             raise Http404
@@ -127,25 +127,24 @@ def add_comment_to_post(request, pk):
             comment = form.save(commit=False)
             comment.post = post
             comment.save()
-            return redirect('detail', pk=post.pk)
+            return redirect('blog:detail', pk=post.pk)
     else:
         form = CommentForm #todo: initialize it!
-    return render(request, 'blog/comment_form.html', {'form':form})
+    return render(request, 'blog/comment_form.html', {'form': form})
 
 
 @login_required
 def comment_approve(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     comment.approve()
-    return render('detail', pk=comment.post.pk)
-
+    return redirect('blog:detail', pk=comment.post.pk)
 
 @login_required
 def comment_remove(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     post_pk = comment.post.pk
     comment.delete()
-    return render('detail', pk=post_pk)
+    return redirect('blog:detail', pk=post_pk)
 
 
 @login_required

@@ -27,10 +27,10 @@ class Post(models.Model):
         return self.comments.filter(approved_comment=True)
 
     def save(self, *args, **kwargs):
-        super().save(*args,**kwargs)
+        super().save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return reverse('blog:detail', kwargs= {'pk': self.pk})
+        return reverse('blog:detail', kwargs={'pk': self.pk})
 
 
 class Comment(models.Model):
